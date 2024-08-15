@@ -36,6 +36,14 @@
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         }
+
+        public function addSpc(){
+            $query = 'insert into espacos(nome, idws) values (:nome, :idws)';
+            $stmt = $this->conexao->prepare($query);
+            $stmt->bindValue(":nome", $this->esp->__get("nome"));
+            $stmt->bindValue(":idws", $this->esp->__get("idws"));
+            $stmt->execute();
+        }
     }
 
     class TarefaService {
@@ -48,7 +56,7 @@
         }
 
         public function recTasks(){
-            $query = 'select t.idt, t.tarefa, t.descricao, s.statu from tarefas as t left join tb_status as s on (t.id_status = s.id_s) where idec = :idec';
+            $query = 'select t.idt, t.tarefa, t.descricao, s.statu, t.id_status from tarefas as t left join tb_status as s on (t.id_status = s.id_s) where idec = :idec';
             $stmt = $this->conexao->prepare($query);
             $stmt->bindValue(":idec", $this->tarefa->__get("idec"));
             $stmt->execute();
@@ -62,6 +70,21 @@
             $stmt->bindValue(":descricao", $this->tarefa->__get("descricao"));
             $stmt->bindValue(":id_status", $this->tarefa->__get("id_status"));
             $stmt->bindValue(":idec", $this->tarefa->__get("idec"));
+            $stmt->execute();
+        }
+
+        public function tratartk(){
+            $query = 'update tarefas set id_status = :id_status where idt = :idt';
+            $stmt = $this->conexao->prepare($query);
+            $stmt->bindValue(":id_status", $this->tarefa->__get("id_status"));
+            $stmt->bindValue(":idt", $this->tarefa->__get("idt"));
+            $stmt->execute();
+        }
+
+        public function excluirtk(){
+            $query = 'delete from tarefas where idt = :idt';
+            $stmt = $this->conexao->prepare($query);
+            $stmt->bindValue(":idt", $this->tarefa->__get("idt"));
             $stmt->execute();
         }
     }

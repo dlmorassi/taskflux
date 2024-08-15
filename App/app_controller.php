@@ -52,13 +52,56 @@
         $tarefa = new Tarefa();
         $tarefa->__set("tarefa", $_POST["taref"]);
         $tarefa->__set("descricao", $_POST["desc"]);
-        $tarefa->__set("id_status", $_POST["idec"]);
+        $tarefa->__set("id_status", $_POST["status"]);
         $tarefa->__set('idec', $_POST["idec"]);
 
         $conexao = new Conexao();
 
         $taskService = new TarefaService($conexao, $tarefa);
         $tasks = $taskService->insTar();
-        header('Location: ../space.php');
+        $idesp = $_POST['idec'];
+        header("Location: ../space.php?id=$idesp");
+    } elseif($acao == "addspc") {
+        $esp = new Espaco();
+        $esp->__set('idws', $_SESSION["idws"]);
+        $esp->__set('nome', $_POST['spcname']);
+
+        $conexao = new Conexao();
+
+        $espService = new EspService($conexao, $esp);
+        $esps = $espService->addSpc();
+        header('Location: ../central.php');
+    } elseif($acao == "tratartk") {
+        $tarefa = new Tarefa();
+        $tarefa->__set("idt", $_GET['idt']);
+        $tarefa->__set("id_status", 2);
+        
+        $conexao = new Conexao();
+
+        $taskService = new TarefaService($conexao, $tarefa);
+        $tasks = $taskService->tratartk();
+        $idesp = $_GET['idec'];
+        header("Location: ../space.php?id=$idesp");
+    } elseif($acao == "ccdtk") {
+        $tarefa = new Tarefa();
+        $tarefa->__set("idt", $_GET['idt']);
+        $tarefa->__set("id_status", 3);
+
+        $conexao = new Conexao();
+
+        $taskService = new TarefaService($conexao, $tarefa);
+        $tasks = $taskService->tratartk();
+        $idesp = $_GET['idec'];
+        header("Location: ../space.php?id=$idesp");
+    } elseif($acao == "excluirtk") {
+        $tarefa = new Tarefa();
+        $tarefa->__set("idt", $_GET['idt']);
+
+        $conexao = new Conexao();
+
+        $taskService = new TarefaService($conexao, $tarefa);
+        $tasks = $taskService->excluirtk();
+        $idesp = $_GET['idec'];
+        header("Location: ../space.php?id=$idesp");
     }
 ?>
